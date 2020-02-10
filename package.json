@@ -9,6 +9,10 @@
   "bin": {
     "version-rn": "./version-rn.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lourencomcviana/version-rn.git"
+  },
   "author": "Lourenço Viana",
   "license": "ISC",
   "dependencies": {
