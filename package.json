@@ -1,12 +1,12 @@
 {
-  "name": "rename-lb",
+  "name": "rename-rn",
   "version": "1.0.0",
   "description": "Upgrade or downgrade version of files that version is controlled by file name. Like database updates",
   "main": "version-rn.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Lourenço Viana",
   "license": "ISC",
   "dependencies": {
     "chalk": "^3.0.0",
