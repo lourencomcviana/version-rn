@@ -1,6 +1,6 @@
 {
-  "name": "rename-rn",
-  "version": "1.0.1",
+  "name": "version-rn",
+  "version": "1.0.0",
   "description": "Upgrade or downgrade version of files that version is controlled by file name. Like database updates",
   "main": "version-rn.js",
   "scripts": {
