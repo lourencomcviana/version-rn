@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // pequeno programa para reordenar arquivos sqls
 const fs = require('fs');
 const prompt = require('prompt');
@@ -89,7 +90,7 @@ function exec(param) {
         showDefaultPrompt(exec)
     } else {
         files.forEach(item => logFile(item));
-        console.log(argv)
+
         if(argv.confirm){
             renameFiles(files);
         } else {
@@ -127,18 +128,20 @@ process.on('SIGINT',fim );
 process.on('exit',fim );
 
 function fim() {
-    console.log(chalk.blue(i18nStr('closeApp')))
+    console.log(chalk.blueBright(i18nStr('closeApp')))
 }
 function parse(file,qtd) {
     let match = versionRegex.exec(file);
     if(match != null ){
         const saida = {
             file: match[0],
-            prefix:  match.groups.prefix ? match.groups.prefix : match[1],
+            prefix:  match.groups.prefix? match.groups.prefix : match[1],
             versionStr:  match.groups.version ? match.groups.version : match[2],
             sufix: match.groups.sufix ? match.groups.sufix : match[3],
 
         };
+        if(!saida.prefix) saida.prefix= ''
+        if(!saida.sufix) saida.sufix= ''
         saida.version = parseInt(saida.versionStr);
         saida.newVersion = pad(saida.version+ parseInt(qtd),getOrSaveConfig('pad'));
         saida.newFile=
