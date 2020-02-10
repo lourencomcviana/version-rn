@@ -1,4 +1,33 @@
 {
-	"warning": "WARNING! {{mensagem}}",
-	"titleWarning": "titleWarning"
+	"titleWarning": "AWAYS be prepared to 'git checkout' if something goes wrong. AWAYS something can go wrong",
+
+	"customFolderWarning": "using custom folder %s",
+	"customFolderError": "the folder specified do not exists!",
+	"customRegexWarning": "using custom regex %s",
+	"customLanguageWarning": "using language %s",
+	"promptSchema": {
+		"version": "since what file version do you want to start?",
+		"versionError": "need to be a number bigger tham 0!",
+		"qtd": "how many versions do you wish to increase?",
+		"qtdError": "must be diferent tham 0!",
+		"confirm": "promptSchema.confirm",
+		"confirmError": "promptSchema.confirmError",
+		"confirmPattern": "promptSchema.confirmPattern"
+	},
+	"confirmPrompt": {
+		"confirm": "do you wish to proceed? (y=yes or n=no)",
+		"confirmError": "answer needs to be 'y', or 'n'",
+		"cancel": "operation was canceled"
+	},
+	"exec": {
+		"fileQtd": "files will be updated"
+	},
+	"noFileFound": "no file found",
+	"closeApp": "application ended",
+	"promptSchema.version": "promptSchema.version",
+	"promptSchema.qtd": "promptSchema.qtd",
+	"promptSchema.confirm": "promptSchema.confirm",
+	"promptSchema.confirmError": "promptSchema.confirmError",
+	"promptSchema.confirmPattern": "promptSchema.confirmPattern",
+	"version": "version"
 }

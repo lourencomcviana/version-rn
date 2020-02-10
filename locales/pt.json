@@ -1,21 +1,29 @@
 {
 	"titleWarning": "Esteja SEMPRE preparado para dar 'git checkout' nos arquivos alterados caso algo de errado. SEMPRE pode dar errado",
+	"customFolderWarning": "utilizando pasta customizada %s",
+	"customFolderError": "aparentemente a pasta não existe!",
 	"customRegexWarning": "utilizando regex customizada %s",
 	"customLanguageWarning": "utilizando lingua customizada %s",
 	"promptSchema": {
 		"version": "a partir de qual versão voce quer incrementar?",
 		"versionError": "precisa ser um número maior que zero!",
 		"qtd": "quantas versões deseja incrementar?",
-		"qtdError": "precisa ser um número!",
+		"qtdError": "precisa ser um número diferente de 0!",
 		"confirm": "promptSchema.confirm",
 		"confirmError": "promptSchema.confirmError",
 		"confirmPattern": "promptSchema.confirmPattern"
 	},
 	"confirmPrompt": {
-		"confirm": "deseja realizar a operação (s ou n)?",
-		"confirmError": "resposta precisa ser 's', ou 'n'",
-		"confirmPattern": "^[snSN]$"
+		"confirm": "deseja realizar a operação? (y = sim ou n = não)",
+		"confirmError": "resposta precisa ser 'y', ou 'n'",
+		"cancel": "operação cancelada, voltando ao inicio"
 	},
+	"exec": {
+		"fileQtd": "arquivos serão alterados"
+	},
+	"noFileFound": "nenhum arquivo encontrado",
+	"closeApp": "aplicação finalizada",
+
 	"promptSchema.version": "promptSchema.version",
 	"promptSchema.qtd": "promptSchema.qtd",
 	"promptSchema.confirm": "promptSchema.confirm",

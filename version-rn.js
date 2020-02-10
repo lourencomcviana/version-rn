@@ -13,9 +13,10 @@ i18n.configure({
     objectNotation:true
 });
 
+const language = getLanguage();
 const dbPath = getPath();
 const versionRegex = getVersionRegex();
-const language = getLanguage();
+
 
 prompt.message='rename';
 prompt.override = argv;
@@ -30,13 +31,13 @@ const promptSchema = {
     properties: {
         version:{
             description: i18nStr('promptSchema.version',null),
-            message: 'precisa ser um número maior que zero!',
+            message:  i18nStr('promptSchema.versionError',null),
             pattern: /^\d*[1-9]\d*$/,
             required: true
         },
         qtd:{
             description:i18nStr('promptSchema.qtd',null),
-            message: 'precisa ser um número!',
+            message:i18nStr('promptSchema.qtdError',null),
             pattern: /^\d*-?[1-9]\d*$/,
             required: true
         }
@@ -48,7 +49,7 @@ const confirmPrompt = {
         confirm: {
             description: i18nStr('confirmPrompt.confirm',null),
             message: i18nStr('confirmPrompt.confirmError',null),
-            pattern: new RegExp(i18nStr('confirmPrompt.confirmPattern',null)),
+            pattern: /^[ynYN]$/,
             required: true
         }
     }
@@ -71,7 +72,7 @@ function showPrompt(schema,callback) {
             callback(result)
         });
     }catch (e) {
-        console.log('aplicação finalizada');
+        console.log(i18nStr('closeApp',null));
     }
 }
 
@@ -84,28 +85,28 @@ function exec(param) {
 
 
     if(files.length === 0){
-        console.log("nenhum arquivo encontrado");
+        console.log(i18nStr('noFileFound',null));
         showDefaultPrompt(exec)
     } else {
         files.forEach(item => logFile(item));
-
-        showConfirmPrompt(function (result) {
-            if(result.confirm.toString().toLowerCase() === 's'){
-                renameFiles(files);
-            } else {
-                console.log(chalk.red("operação cancelada, voltando ao inicio"));
-                showDefaultPrompt(exec);
-            }
-        })
+        console.log(argv)
+        if(argv.confirm){
+            renameFiles(files);
+        } else {
+            showConfirmPrompt(function (result) {
+                if (result.confirm.toString().toLowerCase() === 'y') {
+                    renameFiles(files);
+                } else {
+                    console.log(chalk.red(i18nStr('confirmPrompt.cancel', null)));
+                    showDefaultPrompt(exec);
+                }
+            })
+        }
     }
-
-
-
-
 }
 
 function renameFiles(files) {
-    console.log(chalk.bold(chalk.blue(files.length)) +" arquivos serão alterados");
+    console.log(chalk.bold(chalk.blue(files.length)) +" "+i18nStr('exec.fileQtd',null));
     //renomear da maior versao para a menor
     files.sort((a,b)=> b.version-a.version)
         .forEach(item =>{
@@ -118,21 +119,28 @@ function renameFiles(files) {
             fs.renameSync(path,newPath);
         });
 
+    console.log('arquivos processados com sucesso!')
 
 }
 
+process.on('SIGINT',fim );
+process.on('exit',fim );
+
+function fim() {
+    console.log(chalk.blue(i18nStr('closeApp')))
+}
 function parse(file,qtd) {
     let match = versionRegex.exec(file);
     if(match != null ){
         const saida = {
             file: match[0],
-            prefix:match[1],
-            version:parseInt( match[2]),
-            versionStr:match[2],
-            sufix:match[3],
+            prefix:  match.groups.prefix ? match.groups.prefix : match[1],
+            versionStr:  match.groups.version ? match.groups.version : match[2],
+            sufix: match.groups.sufix ? match.groups.sufix : match[3],
 
         };
-        saida.newVersion = pad(saida.version+ parseInt(qtd),4);
+        saida.version = parseInt(saida.versionStr);
+        saida.newVersion = pad(saida.version+ parseInt(qtd),getOrSaveConfig('pad'));
         saida.newFile=
             saida.prefix +
             saida.newVersion +
@@ -173,9 +181,10 @@ function i18nStr(phrase,parameters,otherLang) {
 function getPath() {
     if(argv.folder){
 
-        console.log('utilizando pasta '+argv.folder);
+        console.log(i18nStr('customFolderWarning',argv.folder));
         if(!fs.existsSync(argv.folder)){
-            console.log(chalk.red("aparentemente a pasta não existe!"))
+            console.log(chalk.red(i18nStr('customFolderError',argv.folder)));
+            console.log(chalk.red(i18nStr("customFolderError",null)))
         }
         return argv.folder
     } else{
@@ -185,7 +194,9 @@ function getPath() {
 
 function getVersionRegex() {
     if(argv.regex){
-        console.log(i18nStr('customRegexWarning',argv.language));
+        config.regex=argv.regex;
+        saveConfig(config)
+        console.log(i18nStr('customRegexWarning',argv.regex));
         return new RegExp(argv.regex)
     } else{
         return new RegExp(config.regex)
@@ -194,10 +205,33 @@ function getVersionRegex() {
 
 function getLanguage() {
     if(argv.language){
+        config.language=argv.language;
+        saveConfig(config)
         console.log(i18nStr('customLanguageWarning',argv.language,argv.language));
+
         return argv.language
     } else{
         return config.language
+    }
+}
+
+function getOrSaveConfig(str) {
+    if(argv[str]){
+        config[str]=argv[str];
+        saveConfig(config)
+    }
+    return config[str]
+}
+
+function saveConfig(config) {
+
+    if(argv.s===true)
+    {
+        fs.writeFile('./default-config.json', JSON.stringify(config, null, 2), 'utf8', function (err) {
+            if (err) {
+                console.log(chalk.red(err))
+            }
+        });
     }
 }
 
